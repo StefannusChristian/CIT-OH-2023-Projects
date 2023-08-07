@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styling/mobile_end.css') }}">
+{% endblock %}
+{% block content %}
+    <h1>Congragulations!</h1>
+    <p>Your Secret Number: {{ secretNumber }}</p>
+{% endblock %}

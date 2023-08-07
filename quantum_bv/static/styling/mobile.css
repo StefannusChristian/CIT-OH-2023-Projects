@@ -1,0 +1,135 @@
+/* Mobile-specific CSS */
+@media (max-width: 767px) {
+    /* Adjust the font size for better readability on smaller screens */
+    body {
+      font-size: 16px;
+    }
+  
+    /* Center the form on the screen */
+    form {
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  
+    /* Add some padding to the form elements */
+    input, button {
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ccc; /* Add a border to the input and button */
+      border-radius: 5px; /* Add rounded corners to the input and button */
+    }
+  
+    /* Add margin between the form elements */
+    input {
+      margin-bottom: 10px;
+    }
+  
+    /* Style the button */
+    #submitBtn {
+      display: block;
+      margin: 0 auto;
+      background-color: #4CAF50; /* Green background color */
+      color: white; /* Text color */
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease; /* Add a smooth transition effect on hover */
+    }
+  
+    #submitBtn:hover {
+      background-color: #45a049; /* Darker green on hover */
+    }
+  
+    /* Adjust the header size */
+    h1 {
+      font-size: 24px;
+    }
+
+
+    .toggle-button {
+      margin: 10px 0; /* Add some vertical spacing between lamps on mobile */
+  }
+
+  .slider {
+      width: 50px; /* Decrease the width of the toggle switch for mobile */
+      height: 28px; /* Decrease the height of the toggle switch for mobile */
+  }
+
+  .slider:before {
+      height: 20px; /* Decrease the size of the switch handle for mobile */
+      width: 20px; /* Decrease the size of the switch handle for mobile */
+  }
+
+  .green-box {
+      width: 30px; /* Decrease the size of the lamp icon for mobile */
+      height: 30px; /* Decrease the size of the lamp icon for mobile */
+      margin-left: 15px; /* Adjust the left margin for mobile */
+  }
+  }
+  
+
+  /* Base styles for both desktop and mobile */
+.toggle-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.toggle-button {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-button input {
+  display: none;
+}
+
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+  margin-left: 10px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  top: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.green-box {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-image: url("/static/images/off.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 25px;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+input:checked + .slider + .green-box {
+  background-image: url("/static/images/on.svg");
+}
+

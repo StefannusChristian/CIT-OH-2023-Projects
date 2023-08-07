@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+<link href="{{ url_for('static', filename='styling/index.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<style>
+        .index_main_section {
+            justify-content: flex-start;
+            margin-bottom: 200px;
+        }
+        button{
+            background-color: maroon;
+        }
+</style>
+<h1 class="text-3xl text-bold">Choose the Image Transformation Technique</h1>
+<form
+    action="/process_enhance_type"
+    method="post"
+    enctype="multipart/form-data"
+    class="
+    flex 
+    flex-col 
+    justify-center
+    items-center"
+>
+    <div id="options" class="flex flex-row">
+        <label>
+            <span>Image Enchancement</span>
+            <input type="radio" name="enhance_type" value="photo" checked>
+            <img src="{{ url_for('static', filename='images/index/enchance.png') }}" alt="Photo Enchacement">
+        </label>
+        
+        <label>
+            <span>Video Enhancement</span>
+            <input type="radio" name="enhance_type" value="video">
+            <img src="{{ url_for('static', filename='images/index/video.png') }}" alt="Video">
+        </label>
+    </div>
+    <div id="submit" class="flex flex-col">
+        <button
+        type="submit"
+        class="p-4  text-white rounded-md"
+    >
+        Next
+    </button>
+    </div>
+</form>
+{% endblock %}

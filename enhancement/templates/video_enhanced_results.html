@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styling/results.css') }}">
+<style>
+  .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  video {
+    width: 100%;
+    height: auto;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1>Enhancement Results</h1>
+  <div class="row">
+    <div class="col">
+      <h2>Before and After</h2>
+      <div class="video-container">
+        <video id="video1" controls>
+          <source src="{{ before_video }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <video id="video2" controls>
+          <source src="{{ after_video }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2>Download Enhanced Videos</h2>
+      <div class="qr-code-container">
+        <img src="{{ qr_path }}" alt="QR Code">
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col">
+      <form action="/return_path" method="POST">
+        <input type="hidden" name="before_video_path" value="{{ before_video }}">
+        <input type="hidden" name="after_video_path" value="{{ after_video }}">
+        <button type="submit" class="return-button">Return</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const video1 = document.getElementById('video1');
+  const video2 = document.getElementById('video2');
+  
+  video1.addEventListener('play', () => {
+    video2.play();
+  });
+  
+  video1.addEventListener('pause', () => {
+    video2.pause();
+  });
+  
+  video1.addEventListener('seeked', () => {
+    video2.currentTime = video1.currentTime;
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styling/quantum_query.css') }}">
+{% endblock %}
+.main_section {
+  background-color: transparent;
+}
+
+{% block rules %}
+<div id="rules">
+    <h2 id="rule_title">Rules</h2>
+    <ul>
+      <li>Ini merupakan permainan Tebak Secret Number.</li>
+      <li>User dapat menebak angka rahasia dengan bantuan oracle.</li>
+      <li>Dalam permainan, pemain dapat menyalakan listrik setiap lampu, dan bertanya kepada oracle. </li>
+      <li>Oracle akan melihat lampu, dan memberitahu jumlah yang menyala (Ganjil / Genap).</li>
+      <li>Lampu yang rusak akan dianggap "0" dan yang dapat menyala akan dianggap "1"</li>
+      <li>Permainan berakhir jika pemain dapat menebak dengan benar, atau salah bertanya hingga kesempatan habis.</li>
+    </ul>
+  </div>
+{% endblock %}
+{% block content %}
+<img class ="logo_title"src=".\static\images\logo.svg" alt="Tebak Lampu">
+<form action="/process_game_type" method="post" id="game_form" onsubmit="return validateForm()">
+        <label for="gameType">Select Game Type:</label>
+    <select id="gameType" name="gameType">
+    <option value="player_game">Player</option>
+    <option value="classic_computer_game">Classic Computer</option>
+    <option value="quantum_computer_game">Quantum Computer</option>
+    </select>
+
+    <br><br>
+    <label for="secretLength">Secret number length:</label>
+    <select id="secretLength" name="secretLength">
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+    </select>
+    <br><br>
+    <label for="inputChoice">Choose Input Type:</label>
+    <select id="inputChoice" name="inputChoice" onchange="toggleInputType()">
+      <option value="direct">Direct Input</option>
+      <option value="indirect">Indirect Input</option>
+    </select>
+    
+    <div id="directInputContainer" class="input-container">
+      <label for="secretNumber">Secret number:</label>
+      <div class="tooltip">
+        <input type="text" id="secretNumber" name="secretNumbers" class="secret-input" pattern="[0-1]+">
+       
+      </div>
+      <span class="explanation" data-tooltip="If left empty, the secret number will be randomized">*</span>
+    </div>
+    
+    <div id="indirectInputContainer" class="input-container" style="display: none;">
+      <div class="qr-code-container">
+        <img src="{{ qr_path }}" alt="QR Code">
+      </div>
+    </div>    
+    <button type="submit">Start Game</button>
+</form>
+{% endblock %}
+
+{%block script%}
+<script>
+    function toggleInputType() {
+        const inputChoice = document.getElementById('inputChoice').value;
+        const directInputContainer = document.getElementById('directInputContainer');
+        const indirectInputContainer = document.getElementById('indirectInputContainer');
+    
+        if (inputChoice === 'direct') {
+          directInputContainer.style.display = 'block';
+          indirectInputContainer.style.display = 'none';
+        } else if (inputChoice === 'indirect') {
+          directInputContainer.style.display = 'none';
+          indirectInputContainer.style.display = 'block';
+        }
+      }
+
+      function validateForm() {
+        const inputChoice = document.getElementById('inputChoice').value;
+        if (inputChoice !== 'direct') {
+            // If inputChoice is not "Direct," validation is not needed.
+            return true;
+        }
+
+        const secretNumberInput = document.getElementById("secretNumber");
+        const selectedLength = parseInt(document.getElementById("secretLength").value, 10);
+
+        if (secretNumberInput.value.trim() === '') {
+            // If the secret number is empty, allow submission.
+            return true;
+        }
+
+        const validPattern = /^[01]+$/;
+        if (!validPattern.test(secretNumberInput.value)) {
+            alert("Please enter only '0' and '1'.");
+            return false;
+        }
+
+        if (secretNumberInput.value.length !== selectedLength) {
+            alert(`The secret number must have a length of ${selectedLength}.`);
+            return false;
+        }
+
+        
+        return true;
+    }
+    
+  </script>
+  
+{% endblock %}

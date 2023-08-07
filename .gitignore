@@ -1,3 +1,10 @@
+/quantum_bv/flask_session
+/enhancement/flask_session
+/enhancement/basicsr
+/enhancement/facelib
+/enhancement/Real-ESRGAN
+/enhancement/weights
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

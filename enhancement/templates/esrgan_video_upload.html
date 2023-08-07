@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styling/camera.css') }}">
+<style>
+    #upload_input {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Enhance Your Video</h1>
+<div id="frame">
+    <form id="upload_video_form" enctype="multipart/form-data">
+        <div id="frame-2">
+            <div id="video_container">
+                <!-- The uploaded video will be displayed here -->
+                <video id="video" width="320" height="240" autoplay></video>
+            </div>
+            <div id="upload_section">
+                <input type="file" name="video" id="upload_video" accept="video/*">
+                <button id="start-stop-record">Start/Stop Recording</button><br>
+                <button type="button" id="upload_video_button">Upload Video</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<button type="button" id="next_button">Next</button>
+
+<div id="results"></div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+<script>
+    let video = document.querySelector("#video");
+    let startStopButton = document.querySelector("#start-stop-record");
+    let uploadButton = document.querySelector("#upload_video_button");
+    let createButton = document.querySelector("#next_button");
+    let videoContainer = document.querySelector("#video_container");
+    let blobsRecorded = [];
+    let mediaRecorder = null;
+    let isRecording = false;
+    let uploadedVideo = null;
+
+    // Configure a few settings and attach camera
+    Webcam.set({
+        width: 500,
+        height: 400,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+
+    Webcam.attach('#video_container');
+
+    startStopButton.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the form from being submitted
+        if (!isRecording) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    });
+
+    function startRecording() {
+        // Set MIME type of recording as video/webm
+        mediaRecorder = new MediaRecorder(Webcam.stream, { mimeType: 'video/webm' });
+
+        // Event: new recorded video blob available 
+        mediaRecorder.addEventListener('dataavailable', function (e) {
+            blobsRecorded.push(e.data);
+        });
+
+        // Event: recording stopped & all blobs sent
+        mediaRecorder.addEventListener('stop', function () {
+            // Create local object URL from the recorded video blobs
+            let videoLocal = URL.createObjectURL(new Blob(blobsRecorded, { type: 'video/webm' }));
+            video.src = videoLocal;
+            createButton.disabled = false;
+            uploadedVideo = null; // Clear uploaded video if any
+        });
+
+        // Start recording with each recorded blob having 1 second video
+        mediaRecorder.start(1000);
+        isRecording = true;
+        startStopButton.textContent = 'Stop Recording';
+    }
+
+    function stopRecording() {
+        mediaRecorder.stop();
+        isRecording = false;
+        startStopButton.textContent = 'Start Recording';
+        
+        // Create a video element for the preview
+        let previewVideo = document.createElement('video');
+        previewVideo.src = URL.createObjectURL(new Blob(blobsRecorded, { type: 'video/webm' }));
+        previewVideo.autoplay = true;
+        previewVideo.loop = true;
+        previewVideo.muted = true;
+        previewVideo.controls = true;
+
+        // Clear any existing video preview and append the new one
+        videoContainer.innerHTML = '';
+        videoContainer.appendChild(previewVideo);
+
+    }
+
+    // Upload video button functionality
+    uploadButton.addEventListener('click', function () {
+        document.getElementById('upload_video').click();
+    });
+
+    // Handle uploaded video
+    document.getElementById('upload_video').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        uploadedVideo = file;
+        var video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.controls = true;
+        document.getElementById('video_container').innerHTML = '';
+        document.getElementById('video_container').appendChild(video);
+    });
+
+    // Create button functionality
+    createButton.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the form from being submitted
+        var formData = new FormData();
+
+        if (uploadedVideo) {
+            formData.append('video', uploadedVideo);
+        } else if (blobsRecorded.length > 0) {
+            formData.append('video', new Blob(blobsRecorded, { type: 'video/webm' }));
+        } else {
+            alert("Please upload or record a video first.");
+            return;
+        }
+
+        fetch('/media_upload', {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow'
+        }).then(function (response) {
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+        });
+    });
+</script>
+{% endblock %}

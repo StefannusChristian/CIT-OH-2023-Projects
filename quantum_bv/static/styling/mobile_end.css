@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h1 {
+    color: #2196F3; /* Blue color for headings */
+}
+
+p {
+    font-size: 24px; /* Increase the font size for the secret number */
+    font-weight: bold; /* Emphasize the secret number */
+    color: #4CAF50; /* Green color for the secret number */
+}

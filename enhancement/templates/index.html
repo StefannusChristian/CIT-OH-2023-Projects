@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HomePage Enhancement</title>
+        <link rel="stylesheet" href="../static/styling/homepage_enhancement.css" />
+    </head>
+    <body>
+  <div class="left">
+    <div class="section">
+      <h1>Image Enhancement</h1>
+      <img class="image" src="../static/images/title.jpg" alt="Title Image">
+      <p class="description">
+        <ul class="description-list">
+          <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et rerum distinctio nesciunt nobis harum fuga molestias maiores perferendis illo veritatis?</li>
+          <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et rerum distinctio nesciunt nobis harum fuga molestias maiores perferendis illo veritatis?</li>
+          <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et rerum distinctio nesciunt nobis harum fuga molestias maiores perferendis illo veritatis?</li>
+        </ul>
+      </p>
+      <button class="button" id="getStartedButton">Get Started</button>
+    </div>
+  </div>
+  <div class="right">
+    <div class="section">
+      <div class="image-comparison">
+        <img class="comparison-image" src="../static/images/blur_image.jpeg" alt="Blur Image" width="300" height="300">
+        <img class="comparison-image" src="../static/images/enhance_image.jpeg" alt="Enhanced Image" width="300" height="300">
+      </div>
+      <div class="video-container">
+        <video class="video" controls width="640" height="360">
+          <source src="../static/images/video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+    </body>
+    <script>
+    document
+        .getElementById("getStartedButton")
+        .addEventListener("click", function () {
+            window.location.href = "/homepage";
+        });
+    </script>
+</html>

@@ -1,0 +1,12 @@
+.header {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    column-gap: 3px;
+    text-align: center;
+    place-items: center;
+  }

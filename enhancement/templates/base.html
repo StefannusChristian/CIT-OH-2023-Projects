@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <!-- In case we need a specific stylesheet for a specific page -->
+        {% block stylesheet %}
+        {% endblock %}
+        <title>IBDA Open House Project</title>
+        <style>
+            body{
+                background-color: #FFBF00
+                ;
+            }
+            .header {
+                background-color: maroon;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 120px;
+                margin-bottom: 50px;
+            }
+
+            .header-image {
+                background-image: url("/static/images/CIT.png");
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                width: 20%;
+                height: 80%;
+            }
+
+            section{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+              
+              .main_section {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 16px;
+                background-color: white;
+                border-radius: 10px;
+                margin-bottom: 30px;
+              }
+              
+        </style>
+    </head>
+    <body style="max-height: 100vh;">
+        <header class="header">
+            <div class="header-image"></div>
+        </header>
+        <section>
+            <main class="main_section index_main_section">
+                <!-- This will ensure that all pages will have a consistent layout and styling -->
+                {% block content %}
+                {% endblock %}
+            </main>
+        </section>
+        <!-- In case we need a specific Javascript Script for only a specific page -->
+        {% block script %}
+        {% endblock %}
+    </body>
+</html>

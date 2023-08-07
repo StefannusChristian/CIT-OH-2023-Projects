@@ -1,0 +1,176 @@
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 500px;
+}
+
+#frame-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  padding: 10px;
+}
+
+#image_container {
+  width: 100%;
+  height: 400px; /* Set a fixed height for the container */
+  display: flex;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  align-items: center;
+  margin: 10px;
+  overflow: hidden;
+}
+
+#image_container img {
+  max-width: 100%; /* Set the maximum width of the image to 100% */
+  max-height: 100%; /* Set the maximum height of the image to 100% */
+  object-fit: contain; /* Maintain the aspect ratio and fit the image within the container */
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#preview_image img {
+  width: 100%; /* Set the width of the image to 100% */
+  height: auto; /* Let the height adjust automatically to maintain aspect ratio */
+}
+
+#video_container {
+  width: 100%;
+  height: 400px; /* Adjust the height to your preference */
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+#video_container video {
+  width: 100%;
+  height: 100%;
+}
+
+#upload_section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: maroon;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: 20px;
+  width: 150px;
+}
+
+button:hover {
+  background-color: darkred;
+}
+
+button:focus {
+  outline: none;
+}
+
+input[type=file] {
+  display: none;
+}
+
+#next_button {
+  background-color: maroon;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 3px;
+  text-align: center;
+  place-items: center;
+}
+
+.grid-compute {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 3px;
+  text-align: center;
+  place-items: center;
+  padding: 10px;
+}
+
+form {
+  padding: 5px;
+  text-align: center;
+}
+
+#options, #options label {
+  margin: 5px;
+  text-align: center;
+}
+
+#submit {
+    margin: 5px;
+}
+
+.grid-compute img {
+  width: 120px;
+  height: 120px;
+  margin: 0px;
+}
+
+#options span, label span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  }
+  
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  outline: 2px solid #f00;
+}
+

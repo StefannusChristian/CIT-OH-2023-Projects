@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styling/results.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1>Enhancement Results</h1>
+  <div class="row">
+    <div class="col1">
+      <h2>Before</h2>
+      <div class="picture-container">
+        <img src="{{ before_img }}" alt="Before">
+      </div>
+    </div>
+    <div class="col2">
+      <h2>After</h2>
+      <div class="picture-container">
+        <img src="{{ restored_img }}" alt="After">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2>Download Enhanced Photo</h2>
+      <div class="qr-code-container">
+        <img src="{{ qr_path }}" alt="QR Code">
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col">
+      <form action="/return_path" method="POST">
+        <input type="hidden" name="before_img_path" value="{{ before_img }}">
+        <input type="hidden" name="restored_img_path" value="{{ restored_img }}">
+        <button type="submit" class="return-button">Return</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

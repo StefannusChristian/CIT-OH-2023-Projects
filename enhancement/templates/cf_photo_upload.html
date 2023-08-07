@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styling/camera.css') }}">
+<style>
+    #upload_input {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Enhance Your Image</h1>
+<div id="frame">
+    <form id="upload_image_form" enctype="multipart/form-data">
+        <div id="frame-2">
+            <div id="image_container">
+                <!-- The uploaded photo will be displayed here -->
+            </div>
+            
+            <div id="upload_section">
+                <input type="file" name="image" id="upload_image" accept="image/*">
+                <button type="button" id="snapshot_button" onClick="take_snapshot()">Take Picture</button><br>
+                <button type="button" id="upload_image_button">Upload Photo</button>
+            </div>
+        </div>
+        <span><h1>Choose the Computing Device</h1></span>
+        <div class="grid-compute">
+            <label>
+                <span>GPU</span>
+                <input type="radio" name="computing-device" value="gpu" checked>
+                <img src="{{ url_for('static', filename='images/computing_devices/gpu.png') }}" alt="GPU">
+            </label>
+            <label>
+                <span>CPU</span>
+                <input type="radio" name="computing-device" value="cpu">
+                <img src="{{ url_for('static', filename='images/computing_devices/cpu.png') }}" alt="CPU">
+            </label>
+        </div>
+    </form>
+</div>
+
+<button type="button" id="next_button">Enhance</button>
+
+<div id="results"></div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+<script>
+    // Configure a few settings and attach camera
+    Webcam.set({
+        width: 500,
+        height: 400,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+
+    Webcam.attach('#image_container');
+
+    // preload shutter audio clip
+    var shutter = new Audio();
+    shutter.autoplay = true;
+    shutter.src = navigator.userAgent.match(/Chrome/) ? 'shutter.ogg' : 'shutter.mp3';
+
+    var capturedImageBlob = null;
+
+    function take_snapshot() {
+        document.getElementById('snapshot_button').disabled = true;
+        document.getElementById('snapshot_button').innerText = "Please Wait";
+
+        // play sound effect
+        shutter.play();
+
+        // Take a snapshot from the webcam
+        Webcam.snap(function (dataURL) {
+            var img = document.createElement('img');
+            img.src = dataURL;
+            img.onload = function () {
+                var aspectRatio = img.width / img.height;
+                var containerWidth = document.getElementById('image_container').offsetWidth;
+                var containerHeight = containerWidth / aspectRatio;
+                document.getElementById('image_container').style.height = containerHeight + 'px';
+
+                document.getElementById('image_container').innerHTML = '';
+                document.getElementById('image_container').appendChild(img);
+
+                // Add a class to center the image within the container
+                document.getElementById('image_container').classList.add('centered');
+
+                // Convert the dataURL to a Blob
+                var byteString = atob(dataURL.split(',')[1]);
+                var mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+                var arrayBuffer = new ArrayBuffer(byteString.length);
+                var uint8Array = new Uint8Array(arrayBuffer);
+
+                for (var i = 0; i < byteString.length; i++) {
+                    uint8Array[i] = byteString.charCodeAt(i);
+                }
+
+                capturedImageBlob = new Blob([arrayBuffer], { type: mimeString });
+
+                // Re-enable the snapshot button
+                document.getElementById('snapshot_button').disabled = false;
+                document.getElementById('snapshot_button').innerText = "Take Picture";
+            };
+        });
+    }
+
+    // Upload photo button functionality
+    document.getElementById('upload_image_button').addEventListener('click', function () {
+        document.getElementById('upload_image').click();
+    });
+
+    // Handle uploaded photo
+    document.getElementById('upload_image').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var img = document.createElement('img');
+            img.src = event.target.result;
+            document.getElementById('image_container').innerHTML = '';
+            document.getElementById('image_container').appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Create button functionality
+    document.getElementById('next_button').addEventListener('click', function () {
+        var imageFile = document.getElementById('upload_image').files[0];
+        var computingDevice = document.querySelector('input[name="computing-device"]:checked').value;
+        
+        if ((imageFile || capturedImageBlob)) {
+            var formData = new FormData();
+            if (imageFile) {
+                formData.append('image', imageFile);
+            } else if (capturedImageBlob) {
+                formData.append('image', capturedImageBlob);
+            }
+    
+            // Append the computing device value to the FormData object
+            formData.append('computing-device', computingDevice);
+    
+            fetch('/photo_upload', {
+                method: 'POST',
+                body: formData,
+                redirect: 'follow'
+            }).then(function (response) {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
