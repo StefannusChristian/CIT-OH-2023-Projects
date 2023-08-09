@@ -3,7 +3,7 @@
 Brief project description here.
 
 ## Getting Started
-
+****
 These instructions will help you set up the project on your local machine.
 
 ### Prerequisites
@@ -14,11 +14,18 @@ These instructions will help you set up the project on your local machine.
 
 1. Open your terminal.
 
-2. Clone the repository:
+   1. Clone the repository:
 
    ```bash
    git clone https://github.com/StefannusChristian/
    CIT-OH-2023-Projects.git
+
+2. Make Conda Virtual Environment:
+
+   ```bash
+   conda create -n yourenvname python=3.9
+   conda activate yourenvname
+
 3. Install requirements
 
     ```bash
