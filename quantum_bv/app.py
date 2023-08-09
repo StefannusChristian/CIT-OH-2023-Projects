@@ -62,7 +62,6 @@ def quantums(n, circuit):
     count = counts[secret_number]
     return secret_number, count
 
-
 @app.route('/')
 def index():
     if request.headers.getlist("X-Forwarded-For"):
@@ -77,11 +76,6 @@ def index():
 @app.route('/homepage')
 def process_user_transformation_choice():
     return render_template('quantum_query.html')
-
-@app.route('/process_enhance_type', methods=["POST", "GET"])
-def process_user_enhance_choice():
-    enhance_type = request.form['enhance_type']
-    return redirect(url_for(enhance_type))
 
 @app.route('/process_mobile_input',  methods=["POST"])
 def process_mobile_input():
@@ -155,10 +149,6 @@ def play_again():
 def not_play_again():
     return render_template("index.html")
 
-@app.route('/enchancement')
-def enchancement():
-    return render_template("image_video.html")
-
 @app.route('/quantum')
 def quantum():
     qr_path = generate_qr_code("user_mob_form")
@@ -168,86 +158,6 @@ def quantum():
 @app.route('/user_mob_form', methods=["GET"])
 def mobile_input():
     return render_template('user_mob.html')
-
-@app.route('/photo')
-def photo():
-    return render_template("cf_photo_upload.html")
-
-@app.route('/video')
-def video():
-    return render_template("esrgan_video_upload.html")
-
-@app.route('/video_enhance_results')
-def video_enhance_results():
-    before_video = request.args.get('before_video')
-    after_video = request.args.get('after_video')
-    qr_path = request.args.get('qr_path')
-    return render_template("video_enhanced_results.html", before_video=before_video, after_video=after_video, qr_path=qr_path)
-
-@app.route('/media_upload', methods=["POST"])
-def upload_video():
-    if request.method == 'POST':
-        target_dir = "./static/videos/user_upload"
-        os.makedirs(target_dir, exist_ok=True) 
-        media = request.files['media']
-        filename = media.filename
-        new_filename = f"enhanced_{filename}"
-
-        file_path = os.path.join(target_dir, filename)
-        media.save(file_path)
-
-        vid_type = request.form.get('media_type')
-
-        if vid_type == "real":
-            command = f'python es_setup.py {filename}'
-            os.system(command)
-
-
-    before_video = os.path.join("./static/videos/user_upload", filename)
-    after_video = os.path.join("./static/videos/results", new_filename)
-    qr_path = generate_qr_code(after_video)
-    return redirect(url_for('video_enhance_results', before_video=before_video, after_video=after_video, qr_path=qr_path))
-
-
-
-@app.route('/photo_upload', methods=["POST"])
-def upload_gfpgan():
-    if request.method == 'POST':
-        target_dir = "./static/images/user_upload"
-        os.makedirs(target_dir, exist_ok=True) 
-
-        file = request.files['image']
-        filename = file.filename
-        file_path = os.path.join(target_dir, filename)
-        file.save(file_path)
-
-        CODEFORMER_FIDELITY = 0.9
-        BACKGROUND_ENHANCE = True
-        FACE_UPSAMPLE = True
-
-        if BACKGROUND_ENHANCE:
-            if FACE_UPSAMPLE:
-                command = f"python inference_codeformer.py -w {CODEFORMER_FIDELITY} --input_path ./static/images/user_upload --bg_upsampler realesrgan --face_upsample"
-            else:
-                command = f"python inference_codeformer.py -w {CODEFORMER_FIDELITY} --input_path ./static/images/user_upload --bg_upsampler realesrgan"
-        else:
-            command = f"python inference_codeformer.py -w {CODEFORMER_FIDELITY} --input_path ./static/images/user_upload"
-
-        os.system(command)
-
-        before_img = os.path.join("./static/images/user_upload", filename)
-        restored_img = os.path.join("./static/images/results/user_upload_0.9/final_results", filename)
-
-        qr_path = generate_qr_code(restored_img)
-
-        return redirect(url_for('gfpgan_results', before_img=before_img, restored_img=restored_img, qr_path=qr_path))
-
-@app.route('/gfpgan_results')
-def gfpgan_results():
-    before_img = request.args.get('before_img')
-    restored_img = request.args.get('restored_img')
-    qr_path = request.args.get('qr_path')
-    return render_template("gfpgan_results.html", before_img=before_img, restored_img=restored_img, qr_path=qr_path)
 
 def generate_qr_code(image_path):
     qr_directory = "./static/images/results"
