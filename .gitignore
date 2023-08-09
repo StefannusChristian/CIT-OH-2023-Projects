@@ -4,6 +4,7 @@
 /enhancement/facelib
 /enhancement/Real-ESRGAN
 /enhancement/weights
+/enhancement/static
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

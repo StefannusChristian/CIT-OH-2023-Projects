@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, send_from_directory, redirect, url_for, session, jsonify, Response, make_response
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_session import Session
 import os
 import qrcode
 import hashlib
-import urllib.parse
 import random
 import shutil
 from qiskit import QuantumCircuit, Aer, execute

@@ -1,12 +1,9 @@
-from flask import Flask, render_template, request, send_from_directory, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_session import Session
 import os
-import base64, io
 import qrcode
 import hashlib
-import urllib.parse
 import shutil
-import torch
 
 """
 Template from: https://github.com/alfanme/dts-deployment-ann
